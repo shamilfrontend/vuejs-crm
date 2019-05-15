@@ -1,19 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="index.css">
-  <title>Document</title>
-</head>
-
-
-<body>
-<div>
+<template>
   <div class="app-main-layout">
     <nav class="navbar orange lighten-1">
       <div class="nav-wrapper">
@@ -27,9 +12,9 @@
         <ul class="right hide-on-small-and-down">
           <li>
             <a
-                class="dropdown-trigger black-text"
-                href="#"
-                data-target="dropdown"
+              class="dropdown-trigger black-text"
+              href="#"
+              data-target="dropdown"
             >
               USER NAME
               <i class="material-icons right">arrow_drop_down</i>
@@ -74,44 +59,25 @@
     <main class="app-content">
       <div class="app-page">
 
+        <router-view />
 
-<div>
-  <div>
-    <div class="breadcrumb-wrap">
-      <a href="/history" class="breadcrumb">История</a>
-      <a class="breadcrumb">
-        Расход
+      </div>
+    </main>
+
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large blue" href="#">
+        <i class="large material-icons">add</i>
       </a>
     </div>
-    <div class="row">
-      <div class="col s12 m6">
-        <div class="card red">
-          <div class="card-content white-text">
-            <p>Описание:</p>
-            <p>Сумма:</p>
-            <p>Категория:</p>
-
-            <small>12.12.12</small>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
-</div>
+</template>
 
+<script>
+  export default {
+    name: "MainLayout"
+  }
+</script>
 
-</div>
-</main>
+<style scoped>
 
-<div class="fixed-action-btn">
-  <a class="btn-floating btn-large blue" href="#">
-    <i class="large material-icons">add</i>
-  </a>
-</div>
-</div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-</body>
-</html>
-
+</style>
