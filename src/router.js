@@ -24,7 +24,7 @@ const router = new Router({
       component: () => import('@/views/Register'),
     },
     {
-      path: '/home',
+      path: '/',
       name: 'Home',
       meta: {
         layout: 'main',
