@@ -1,36 +1,58 @@
 <template>
-  <form class="card auth-card">
+  <form
+    class="card auth-card"
+    @submit.prevent="submitHandler"
+  >
     <div class="card-content">
       <span class="card-title">Домашняя бухгалтерия</span>
       <div class="input-field">
         <input
+          v-model.trim="email"
           id="email"
           type="text"
+          :class="emailClasses"
         >
         <label for="email">Email</label>
-        <small class="helper-text invalid">Email</small>
+        <small v-if="isEmailRequired" class="helper-text invalid">
+          Поле Email не должно быть пустым.
+        </small>
+        <small v-else-if="isValidEmail" class="helper-text invalid">
+          Введите корректный email.
+        </small>
       </div>
       <div class="input-field">
         <input
+          v-model.trim="password"
           id="password"
           type="password"
-          class="validate"
+          :class="passwordClasses"
         >
         <label for="password">Пароль</label>
-        <small class="helper-text invalid">Password</small>
+        <small v-if="passwordIsRequired" class="helper-text invalid">
+          Поле пароля не должно быть пустым.
+        </small>
+        <small v-else-if="passwordIsCorrectLength" class="helper-text invalid">
+          Пароль должен быть больше {{$v.password.$params.minLength.min}} символов& Сейчас он {{ password.length }}
+        </small>
       </div>
       <div class="input-field">
         <input
+          v-model.trim="name"
           id="name"
           type="text"
-          class="validate"
+          :class="nameClasses"
         >
         <label for="name">Имя</label>
-        <small class="helper-text invalid">Name</small>
+        <small v-if="$v.name.$dirty && !$v.name.required" class="helper-text invalid">
+          Введите ваше имя.
+        </small>
       </div>
       <p>
         <label>
-          <input type="checkbox"/>
+          <input
+            type="checkbox"
+            v-model="agree"
+          />
           <span>С правилами согласен</span>
         </label>
       </p>
@@ -48,15 +70,94 @@
 
       <p class="center">
         Уже есть аккаунт?
-        <a href="/">Войти!</a>
+        <router-link to="/login">Войти!</router-link>
       </p>
     </div>
   </form>
 </template>
 
 <script>
+  const {email, required, minLength} = require('vuelidate/lib/validators');
+
   export default {
-    name: "Register"
+    name: "Register",
+
+    data() {
+      return {
+        email: '',
+        password: '',
+        name: '',
+        agree: false,
+      };
+    },
+
+    validations: {
+      email: {
+        email,
+        required,
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      name: {
+        required,
+      },
+      agree: {
+        chacked: value => value,
+      }
+    },
+
+    computed: {
+      isEmailRequired() {
+        return this.$v.$dirty && !this.$v.email.required;
+      },
+      isValidEmail() {
+        return this.$v.$dirty && !this.$v.email.email;
+      },
+      emailClasses() {
+        return {
+          'invalid': (this.isValidEmail) || (this.isEmailRequired),
+        };
+      },
+
+      passwordIsRequired() {
+        return this.$v.$dirty && !this.$v.password.required;
+      },
+      passwordIsCorrectLength() {
+        return this.$v.$dirty && !this.$v.password.minLength;
+      },
+      passwordClasses() {
+        return {
+          'invalid': (this.passwordIsRequired) || (this.passwordIsCorrectLength),
+        };
+      },
+
+      nameClasses() {
+        return {
+          'invalid': this.$v.$dirty && !this.$v.name.required,
+        };
+      },
+    },
+
+    methods: {
+      submitHandler() {
+        if (this.$v.$invalid) {
+          this.$v.$touch();
+          return;
+        }
+
+        const formData = {
+          email: this.email,
+          password: this.password,
+          name: this.name,
+        };
+
+        console.log('formData', formData);
+
+        this.$router.push('/')
+      },
+    },
   }
 </script>
 
