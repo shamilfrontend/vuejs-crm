@@ -1,10 +1,14 @@
 <template>
   <div class="app-main-layout">
-    <nav-bar />
+    <nav-bar
+      @click="isOpen = !isOpen"
+    />
 
-    <side-nav />
+    <side-nav
+      v-model="isOpen"
+    />
 
-    <main class="app-content">
+    <main :class="appContentClasses">
       <div class="app-page">
 
         <router-view />
@@ -26,9 +30,25 @@
 
   export default {
     name: "MainLayout",
+
     components: {
       NavBar,
       SideNav,
+    },
+
+    data() {
+      return {
+        isOpen: true,
+      };
+    },
+
+    computed: {
+      appContentClasses() {
+        return {
+          'app-content': true,
+          'full': !this.isOpen,
+        };
+      },
     },
   }
 </script>
