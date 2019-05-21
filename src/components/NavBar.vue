@@ -63,7 +63,7 @@
 
     computed: {
       userName() {
-        return 'USER NAME';
+        return this.$store.getters.info.name;
       },
     },
 
