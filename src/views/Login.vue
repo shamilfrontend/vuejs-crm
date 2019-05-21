@@ -113,15 +113,11 @@
           return;
         }
 
-        const formData = {
-          email: this.email,
-          password: this.password,
-        };
-
-        console.log('formData', formData);
-
         try {
-          await this.$store.dispatch('login', formData);
+          await this.$store.dispatch('login', {
+            email: this.email,
+            password: this.password,
+          });
           this.$router.push('/');
         } catch (e) {}
       },

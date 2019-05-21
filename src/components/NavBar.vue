@@ -68,9 +68,12 @@
     },
 
     methods: {
-      logOut() {
-        console.log('logOut');
-        this.$router.push('/login?message=logout');
+      async logOut() {
+        try {
+          await this.$store.dispatch('logOut');
+          this.$router.push('/login?message=logout');
+        } catch (e) {
+        }
       },
     },
 
