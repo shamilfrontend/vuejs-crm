@@ -1,28 +1,34 @@
 <template>
-  <div class="app-main-layout">
-    <nav-bar
-      @click="isOpen = !isOpen"
-    />
+  <div class="wrap">
+    <loader v-if="loading" />
+    <div
+      v-else
+      class="app-main-layout"
+    >
+      <nav-bar
+        @click="isOpen = !isOpen"
+      />
 
-    <side-nav
-      v-model="isOpen"
-    />
+      <side-nav
+        v-model="isOpen"
+      />
 
-    <main :class="appContentClasses">
-      <div class="app-page">
+      <main :class="appContentClasses">
+        <div class="app-page">
 
-        <router-view />
+          <router-view />
 
+        </div>
+      </main>
+
+      <div class="fixed-action-btn">
+        <router-link
+          class="btn-floating btn-large blue"
+          to="/record"
+        >
+          <i class="large material-icons">add</i>
+        </router-link>
       </div>
-    </main>
-
-    <div class="fixed-action-btn">
-      <router-link
-        class="btn-floating btn-large blue"
-        to="/record"
-      >
-        <i class="large material-icons">add</i>
-      </router-link>
     </div>
   </div>
 </template>
@@ -42,6 +48,7 @@
     data() {
       return {
         isOpen: true,
+        loading: true,
       };
     },
 
@@ -58,6 +65,7 @@
       if (!Object.keys(this.$store.getters.info).length) {
         await this.$store.dispatch('fetchInfo');
       }
+      this.loading = false;
     }
   }
 </script>

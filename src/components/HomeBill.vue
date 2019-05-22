@@ -4,8 +4,12 @@
       <div class="card-content white-text">
         <span class="card-title">Счет в валюте</span>
 
-        <p class="currency-line">
-          <span>{{ bill }} 12.0 Р</span>
+        <p
+          v-for="item in currencies"
+          :key="item"
+          class="currency-line"
+        >
+          <span>{{ getCurrency(item) | currency(item) }}</span>
         </p>
       </div>
     </div>
@@ -16,11 +20,25 @@
   export default {
     name: "HomeBill",
 
+    props: ['rates'],
+
+    data() {
+      return {
+        currencies: ['RUB', 'USD', 'EUR'],
+      };
+    },
+
     computed: {
-      bill() {
-        return this.$store.getters.info.bill;
+      base() {
+        return this.$store.getters.info.bill / (this.rates['RUB'] / this.rates['EUR']);
       },
     },
+
+    methods: {
+      getCurrency(currency) {
+        return Math.floor(this.base * this.rates[currency]);
+      }
+    }
   }
 </script>
 
