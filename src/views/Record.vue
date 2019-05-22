@@ -4,11 +4,33 @@
       <h3>Новая запись</h3>
     </div>
 
-    <form class="form">
+    <loader
+      v-if="loading"
+    />
+
+    <p
+      v-else-if="!categories.length"
+      class="center"
+    >
+      Категорий пока нет
+      <router-link to="/categories">Добавить новую категорию</router-link>
+    </p>
+
+    <form
+      v-else
+      class="form"
+      @submit.prevent="submitHandler"
+    >
       <div class="input-field">
-        <select>
+        <select
+          v-model="category"
+          ref="select"
+        >
           <option
-          >name cat
+            v-for="item of categories"
+            :key="item.id"
+            :value="item.id"
+          >{{ item.title }}
           </option>
         </select>
         <label>Выберите категорию</label>
@@ -17,6 +39,7 @@
       <p>
         <label>
           <input
+            v-model="type"
             class="with-gap"
             name="type"
             type="radio"
@@ -29,6 +52,7 @@
       <p>
         <label>
           <input
+            v-model="type"
             class="with-gap"
             name="type"
             type="radio"
@@ -40,21 +64,30 @@
 
       <div class="input-field">
         <input
+          v-model.number="amount"
           id="amount"
           type="number"
+          :class="{invalid: $v.amount.$dirty && !$v.amount.minValue}"
         >
         <label for="amount">Сумма</label>
-        <span class="helper-text invalid">amount пароль</span>
+        <span
+          v-if="$v.amount.$dirty && !$v.amount.minValue"
+          class="helper-text invalid"
+        >Минимальное значение {{$v.amount.$params.minValue.min}}</span>
       </div>
 
       <div class="input-field">
         <input
+          v-model="description"
           id="description"
           type="text"
+          :class="{invalid: $v.description.$dirty && !$v.description.required}"
         >
         <label for="description">Описание</label>
         <span
-          class="helper-text invalid">description пароль</span>
+          v-if="$v.amount.$dirty && !$v.description.required"
+          class="helper-text invalid"
+        >Необходимо ввести описание</span>
       </div>
 
       <button class="btn waves-effect waves-light" type="submit">
@@ -66,8 +99,103 @@
 </template>
 
 <script>
+  import {required, minValue} from 'vuelidate/lib/validators';
+  import {mapGetters} from 'vuex';
+
   export default {
-    name: "Record"
+    name: "Record",
+
+    data() {
+      return {
+        loading: true,
+        categories: [],
+        select: null,
+
+        category: '',
+        type: 'outcome',
+        amount: 1,
+        description: '',
+      };
+    },
+
+    validations: {
+      amount: {
+        required,
+        minValue: minValue(1),
+      },
+      description: {
+        required,
+      },
+    },
+
+    computed: {
+      ...mapGetters(['info']),
+      bill() {
+        return this.info.bill;
+      },
+      canCreateRecord() {
+        if (this.type === 'income') return true;
+        return this.bill >= this.amount;
+      },
+    },
+
+    methods: {
+      async submitHandler() {
+        if (this.$v.$invalid) {
+          this.$v.$touch();
+          return;
+        }
+
+        if (this.canCreateRecord) {
+          try {
+            await this.$store.dispatch('createRecord', {
+              categoryId: this.category,
+              type: this.type,
+              amount: this.amount,
+              description: this.description,
+              date: new Date().toJSON(),
+            });
+
+            const bill = this.type === 'income'
+              ? this.bill + this.amount
+              : this.bill - this.amount;
+
+            await this.$store.dispatch('updateInfo', {
+              bill,
+            });
+
+            this.$message('Запись успешно создана!');
+            this.$v.$reset();
+
+            this.amount = 1;
+            this.description = '';
+          } catch (e) {
+          }
+        } else {
+          this.$message(`Недостаточно средств на счете (${this.amount - this.bill})`);
+        }
+      },
+    },
+
+    async mounted() {
+      this.categories = await this.$store.dispatch('fetchCategories');
+      this.loading = false;
+
+      if (this.categories.length) {
+        this.category = this.categories[0].id;
+      }
+
+      this.$nextTick(() => {
+        M.updateTextFields();
+        this.select = M.FormSelect.init(this.$refs.select);
+      });
+    },
+
+    beforeDestroy() {
+      if (this.select && this.select.destroy) {
+        M.FormSelect.destroy();
+      }
+    }
   }
 </script>
 

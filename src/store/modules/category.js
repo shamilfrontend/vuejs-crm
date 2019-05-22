@@ -1,12 +1,6 @@
 import firebase from 'firebase/app';
 
 export default {
-  state: {
-    categories: null,
-  },
-  getters: {},
-  mutations: {
-  },
   actions: {
     async createCategory({dispatch, commit}, {title, limit}) {
       try {
