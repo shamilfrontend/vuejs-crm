@@ -67,6 +67,7 @@
           v-model.number="amount"
           id="amount"
           type="number"
+          autocomplete="off"
           :class="{invalid: $v.amount.$dirty && !$v.amount.minValue}"
         >
         <label for="amount">Сумма</label>
@@ -81,6 +82,7 @@
           v-model="description"
           id="description"
           type="text"
+          autocomplete="off"
           :class="{invalid: $v.description.$dirty && !$v.description.required}"
         >
         <label for="description">Описание</label>

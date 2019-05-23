@@ -9,12 +9,18 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 
+// filters
 import dateFilter from './filters/date.filter';
 import currencyFilter from './filters/currency.filter';
+
+// directives
 import messagePlugin from './plugins/message.plugin';
 
-import Loader from './components/Loader';
+// directives
+import tooltipDirective from './directives/tooltip.directive';
 
+// components
+import Loader from './components/Loader';
 
 import './registerServiceWorker';
 import 'materialize-css/dist/js/materialize.min';
@@ -26,6 +32,9 @@ Vue.filter('currency', currencyFilter);
 // use plugins
 Vue.use(Vuelidate);
 Vue.use(messagePlugin);
+
+// directives
+Vue.directive('tooltip', tooltipDirective);
 
 // components
 Vue.component('Loader', Loader);
