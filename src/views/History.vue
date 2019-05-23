@@ -24,7 +24,6 @@
       <history-table
         :records="records"
       />
-      <pre>{{records}}</pre>
     </section>
   </div>
 </template>
@@ -60,9 +59,6 @@
       }));
 
       this.loading = false;
-
-      console.log('this.records', this.records);
-      console.log('this.categories', this.categories);
     }
   }
 </script>

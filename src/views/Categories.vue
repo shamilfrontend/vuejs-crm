@@ -48,7 +48,6 @@
     methods: {
       addNewCategory(category) {
         this.categories.push(category);
-        console.log('this.categories', this.categories);
       },
       updateCategories(category) {
         const index = this.categories.findIndex(item => item.id === category.id);
