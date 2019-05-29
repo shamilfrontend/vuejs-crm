@@ -8,12 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "chart.js": "^2.8.0",
     "core-js": "^2.6.5",
     "firebase": "^6.0.2",
     "lodash": "^4.17.11",
     "materialize-css": "^1.0.0-rc.2",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
+    "vue-chartjs": "^3.4.2",
     "vue-router": "^3.0.3",
     "vuejs-paginate": "^2.1.0",
     "vuelidate": "^0.7.4",
