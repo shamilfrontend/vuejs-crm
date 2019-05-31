@@ -91,6 +91,12 @@
       };
     },
 
+    metaInfo() {
+      return {
+        title: 'Регистрация'
+      };
+    },
+
     validations: {
       email: {
         email,

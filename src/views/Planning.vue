@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="page-title">
-      <h3>Планирование</h3>
-      <h4>{{bill | currency('RUB')}}</h4>
+      <h3>{{ 'Menu_Planning' | localize }}</h3>
+      <h4>{{ bill | currency('RUB') }}</h4>
     </div>
 
     <loader v-if="loading"/>
@@ -11,7 +11,7 @@
       v-else-if="!categories.length"
       class="center"
     >
-      Категорий пока нет
+      {{ 'NoCategories' | localize }}
       <router-link to="/categories">Добавить новую категорию</router-link>
     </p>
 
@@ -54,6 +54,12 @@
       return {
         loading: true,
         categories: [],
+      };
+    },
+
+    metaInfo() {
+      return {
+        title: this.$title('Menu_Planning')
       };
     },
 

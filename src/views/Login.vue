@@ -69,6 +69,12 @@
       };
     },
 
+    metaInfo() {
+      return {
+        title: this.$title('Login')
+      };
+    },
+
     validations: {
       email: {
         required,

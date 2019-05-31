@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page-title">
-      <h3>Профиль</h3>
+      <h3>{{ 'ProfileTitle' | localize }}</h3>
     </div>
 
     <form
@@ -15,12 +15,12 @@
           type="text"
           :class="{invalid: $v.name.$dirty && !$v.name.required}"
         >
-        <label for="description">Имя</label>
+        <label for="description">{{ 'Name' | localize }}</label>
         <small
           v-if="$v.name.$dirty && !$v.name.required"
           class="helper-text invalid"
         >
-          Введите имя
+          {{ 'Message_EnterName' | localize  }}
         </small>
       </div>
 
@@ -40,7 +40,7 @@
         class="btn waves-effect waves-light"
         type="submit"
       >
-        Обновить
+        {{ 'Update' | localize }}
         <i class="material-icons right">send</i>
       </button>
     </form>
@@ -57,6 +57,12 @@
       return {
         name: '',
         isRuLocale: true,
+      };
+    },
+
+    metaInfo() {
+      return {
+        title: this.$title('ProfileTitle')
       };
     },
 

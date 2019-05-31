@@ -8,7 +8,9 @@
         >
           <i class="material-icons black-text">dehaze</i>
         </a>
-        <span class="black-text">Моя бухгалтерия - {{ date | date('datetime') }}</span>
+        <span class="black-text">
+          {{ 'CRM_Title' | localize }} - {{ date | date('datetime') }}
+        </span>
       </div>
 
       <ul class="right hide-on-small-and-down">
@@ -29,7 +31,7 @@
                 to="/profile"
                 class="black-text"
               >
-                <i class="material-icons">account_circle</i>Профиль
+                <i class="material-icons">account_circle</i> {{'ProfileTitle' | localize}}
               </router-link>
             </li>
             <li class="divider" tabindex="-1"></li>
@@ -39,7 +41,7 @@
                 class="black-text"
                 @click.prevent="logOut"
               >
-                <i class="material-icons">assignment_return</i>Выйти
+                <i class="material-icons">assignment_return</i> {{'Exit' | localize}}
               </a>
             </li>
           </ul>

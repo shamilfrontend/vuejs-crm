@@ -48,6 +48,12 @@
       };
     },
 
+    metaInfo() {
+      return {
+        title: this.$title('Menu_History')
+      };
+    },
+
     async mounted() {
       const id = this.$route.params.id;
 

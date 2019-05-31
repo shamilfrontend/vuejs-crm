@@ -37,6 +37,12 @@
       CategoryEdit
     },
 
+    metaInfo() {
+      return {
+        title: this.$title('Categories')
+      };
+    },
+
     data() {
       return {
         categories: [],

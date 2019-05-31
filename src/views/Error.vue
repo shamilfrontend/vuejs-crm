@@ -3,7 +3,13 @@
 
 <script>
   export default {
-    name: "Error"
+    name: "Error",
+
+    metaInfo() {
+      return {
+        title: this.$title('Error')
+      };
+    },
   }
 </script>
 

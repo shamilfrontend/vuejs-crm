@@ -1,18 +1,16 @@
 <template>
   <div>
     <div class="page-title">
-      <h3>Новая запись</h3>
+      <h3>{{ 'Menu_NewRecord' | localize }}</h3>
     </div>
 
-    <loader
-      v-if="loading"
-    />
+    <loader v-if="loading"/>
 
     <p
       v-else-if="!categories.length"
       class="center"
     >
-      Категорий пока нет
+      {{'NoCategories' | localize}}
       <router-link to="/categories">Добавить новую категорию</router-link>
     </p>
 
@@ -33,7 +31,7 @@
           >{{ item.title }}
           </option>
         </select>
-        <label>Выберите категорию</label>
+        <label>{{ 'SelectCategory' | localize }}</label>
       </div>
 
       <p>
@@ -45,7 +43,7 @@
             type="radio"
             value="income"
           />
-          <span>Доход</span>
+          <span>{{ 'Income' | localize }}</span>
         </label>
       </p>
 
@@ -58,7 +56,7 @@
             type="radio"
             value="outcome"
           />
-          <span>Расход</span>
+          <span>{{ 'Outcome' | localize }}</span>
         </label>
       </p>
 
@@ -106,6 +104,12 @@
 
   export default {
     name: "Record",
+
+    metaInfo() {
+      return {
+        title: this.$title('Menu_NewRecord')
+      };
+    },
 
     data() {
       return {

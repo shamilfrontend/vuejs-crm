@@ -11,6 +11,7 @@
 
       <side-nav
         v-model="isOpen"
+        :key="locale"
       />
 
       <main :class="appContentClasses">
@@ -27,7 +28,7 @@
         <router-link
           class="btn-floating btn-large blue"
           to="/record"
-          v-tooltip="'Создать новую запись'"
+          v-tooltip="'CreateNewRecord'"
         >
           <i class="large material-icons">add</i>
         </router-link>
@@ -66,6 +67,9 @@
       },
       error() {
         return this.$store.getters.error;
+      },
+      locale() {
+        return this.$store.getters.info.locale;
       },
     },
 

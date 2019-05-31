@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page-title">
-      <h3>История записей</h3>
+      <h3>{{'History_Title' | localize}}</h3>
     </div>
 
     <div class="history-chart">
@@ -14,7 +14,7 @@
       v-else-if="!records.length"
       class="center"
     >
-      Записей пока нет
+      {{ 'NoRecords' | localize }}
       <router-link to="/categories">Добавить новую запись</router-link>
     </p>
 
@@ -28,8 +28,8 @@
         v-model="page"
         :page-count="pageCount"
         :click-handler="pageChangeHandler"
-        :prev-text="'Назад'"
-        :next-text="'Вперед'"
+        :prev-text="'Back' | localize"
+        :next-text="'Forward' | localize"
         :container-class="'pagination'"
         :page-class="'waves-effect'"
       />
@@ -49,6 +49,12 @@
     extends: Pie,
 
     mixins: [paginationMixin],
+
+    metaInfo() {
+      return {
+        title: this.$title('Menu_History')
+      };
+    },
 
     data() {
       return {

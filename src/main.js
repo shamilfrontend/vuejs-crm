@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import Paginate from 'vuejs-paginate';
+import VueMeta from 'vue-meta'
 
 import App from './App.vue';
 import router from './router';
@@ -13,9 +14,11 @@ import 'firebase/database';
 // filters
 import dateFilter from './filters/date.filter';
 import currencyFilter from './filters/currency.filter';
+import localizeFilter from './filters/localize.filter';
 
 // directives
 import messagePlugin from './plugins/message.plugin';
+import titlePlugin from './plugins/title.plugin';
 
 // directives
 import tooltipDirective from './directives/tooltip.directive';
@@ -29,10 +32,15 @@ import 'materialize-css/dist/js/materialize.min';
 // filters
 Vue.filter('date', dateFilter);
 Vue.filter('currency', currencyFilter);
+Vue.filter('localize', localizeFilter);
 
 // use plugins
 Vue.use(Vuelidate);
 Vue.use(messagePlugin);
+Vue.use(titlePlugin);
+ Vue.use(VueMeta, {
+  refreshOnceOnNavigation: true
+});
 
 // directives
 Vue.directive('tooltip', tooltipDirective);
