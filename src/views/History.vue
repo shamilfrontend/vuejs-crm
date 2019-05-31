@@ -75,8 +75,6 @@
           typeClass: record.type === 'income' ? 'green' : 'red',
           typeText: record.type === 'income' ? 'Доход' : 'Расход',
         })));
-        console.clear();
-        console.log('categories', categories);
 
         this.renderChart({
           labels: categories.map(item => item.title),

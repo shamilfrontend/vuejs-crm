@@ -1,5 +1,12 @@
 # vuejs-crm
 
+## Demo
+```
+URL - https://vuejs-crm.web.app/
+Логин - shoma@mail.ru
+Пароль - 123456
+```
+
 ## Project setup
 ```
 npm install

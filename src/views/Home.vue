@@ -58,7 +58,8 @@
     methods: {
       async refresh() {
         this.loading = true;
-        const mockData = {
+        // сервис для получения данных await this.$store.dispatch('fetchCurrency')
+        this.currency = {
           base: "EUR",
           date: "2019-05-31",
           rates: {
@@ -72,9 +73,6 @@
           success: true,
           timestamp: 1559342345
         };
-        // await this.$store.dispatch('fetchCurrency')
-        this.currency = mockData;
-        console.log('this.currency', this.currency);
         this.loading = false;
       },
     },
