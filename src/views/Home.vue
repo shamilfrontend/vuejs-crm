@@ -11,7 +11,7 @@
       </button>
     </div>
 
-    <loader v-if="loading" />
+    <loader v-if="loading"/>
 
     <div
       v-else
@@ -31,40 +31,56 @@
 </template>
 
 <script>
-import HomeBill from '@/components/HomeBill'
-import HomeCurrency from '@/components/HomeCurrency'
+  import HomeBill from '@/components/HomeBill'
+  import HomeCurrency from '@/components/HomeCurrency'
 
-export default {
-  name: 'home',
+  export default {
+    name: 'home',
 
-  data() {
-    return {
-      loading: true,
-      currency: null,
-    };
-  },
-
-  components: {
-    HomeBill,
-    HomeCurrency,
-  },
-
-  metaInfo() {
-    return {
-      title: this.$title('CRM_Title')
-    };
-  },
-
-  methods: {
-    async refresh() {
-      this.loading = true;
-      this.currency = await this.$store.dispatch('fetchCurrency');
-      this.loading = false;
+    data() {
+      return {
+        loading: true,
+        currency: null,
+      };
     },
-  },
 
-  async mounted() {
-    this.refresh();
-  }
-};
+    components: {
+      HomeBill,
+      HomeCurrency,
+    },
+
+    metaInfo() {
+      return {
+        title: this.$title('CRM_Title')
+      };
+    },
+
+    methods: {
+      async refresh() {
+        this.loading = true;
+        const mockData = {
+          base: "EUR",
+          date: "2019-05-31",
+          rates: {
+            USD: 1.119845,
+            EUR: 1,
+            RUB: 73.322553
+          },
+          EUR: 1,
+          RUB: 73.322553,
+          USD: 1.119845,
+          success: true,
+          timestamp: 1559342345
+        };
+        // await this.$store.dispatch('fetchCurrency')
+        this.currency = mockData;
+        console.log('this.currency', this.currency);
+        this.loading = false;
+      },
+    },
+
+    async mounted() {
+      this.refresh();
+    }
+  };
 </script>
