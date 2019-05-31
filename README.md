@@ -1,8 +1,8 @@
 # vuejs-crm
 
 ## Demo
+URL - https://vuejs-crm.web.app/
 ```
-URL - <a href="https://vuejs-crm.web.app/">https://vuejs-crm.web.app/</a>
 Логин - shoma@mail.ru
 Пароль - 123456
 ```
