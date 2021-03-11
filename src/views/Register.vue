@@ -32,7 +32,8 @@
           Поле пароля не должно быть пустым.
         </small>
         <small v-else-if="passwordIsCorrectLength" class="helper-text invalid">
-          Пароль должен быть больше {{$v.password.$params.minLength.min}} символов& Сейчас он {{ password.length }}
+          Пароль должен быть больше {{$v.password.$params.minLength.min}} символов&
+          Сейчас он {{ password.length }}
         </small>
       </div>
       <div class="input-field">
@@ -77,96 +78,97 @@
 </template>
 
 <script>
-  const {email, required, minLength} = require('vuelidate/lib/validators');
+const { email, required, minLength } = require('vuelidate/lib/validators');
 
-  export default {
-    name: "Register",
+export default {
+  name: 'Register',
 
-    data() {
+  data() {
+    return {
+      email: '',
+      password: '',
+      name: '',
+      agree: false,
+    };
+  },
+
+  metaInfo() {
+    return {
+      title: 'Регистрация',
+    };
+  },
+
+  validations: {
+    email: {
+      email,
+      required,
+    },
+    password: {
+      required,
+      minLength: minLength(6),
+    },
+    name: {
+      required,
+    },
+    agree: {
+      chacked: value => value,
+    },
+  },
+
+  computed: {
+    isEmailRequired() {
+      return this.$v.$dirty && !this.$v.email.required;
+    },
+    isValidEmail() {
+      return this.$v.$dirty && !this.$v.email.email;
+    },
+    emailClasses() {
       return {
-        email: '',
-        password: '',
-        name: '',
-        agree: false,
+        invalid: (this.isValidEmail) || (this.isEmailRequired),
       };
     },
 
-    metaInfo() {
+    passwordIsRequired() {
+      return this.$v.$dirty && !this.$v.password.required;
+    },
+    passwordIsCorrectLength() {
+      return this.$v.$dirty && !this.$v.password.minLength;
+    },
+    passwordClasses() {
       return {
-        title: 'Регистрация'
+        invalid: (this.passwordIsRequired) || (this.passwordIsCorrectLength),
       };
     },
 
-    validations: {
-      email: {
-        email,
-        required,
-      },
-      password: {
-        required,
-        minLength: minLength(6),
-      },
-      name: {
-        required,
-      },
-      agree: {
-        chacked: value => value,
+    nameClasses() {
+      return {
+        invalid: this.$v.$dirty && !this.$v.name.required,
+      };
+    },
+  },
+
+  methods: {
+    async submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
+
+      const formData = {
+        email: this.email,
+        password: this.password,
+        name: this.name,
+      };
+
+      try {
+        await this.$store.dispatch('register', formData);
+        this.$router.push('/');
+      } catch {
+        // do nothing
       }
     },
-
-    computed: {
-      isEmailRequired() {
-        return this.$v.$dirty && !this.$v.email.required;
-      },
-      isValidEmail() {
-        return this.$v.$dirty && !this.$v.email.email;
-      },
-      emailClasses() {
-        return {
-          'invalid': (this.isValidEmail) || (this.isEmailRequired),
-        };
-      },
-
-      passwordIsRequired() {
-        return this.$v.$dirty && !this.$v.password.required;
-      },
-      passwordIsCorrectLength() {
-        return this.$v.$dirty && !this.$v.password.minLength;
-      },
-      passwordClasses() {
-        return {
-          'invalid': (this.passwordIsRequired) || (this.passwordIsCorrectLength),
-        };
-      },
-
-      nameClasses() {
-        return {
-          'invalid': this.$v.$dirty && !this.$v.name.required,
-        };
-      },
-    },
-
-    methods: {
-      async submitHandler() {
-        if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
-        }
-
-        const formData = {
-          email: this.email,
-          password: this.password,
-          name: this.name,
-        };
-
-        try {
-          await this.$store.dispatch('register', formData);
-          this.$router.push('/')
-        } catch (e) {
-        }
-      },
-    },
-  }
+  },
+};
 </script>
 
 <style scoped>

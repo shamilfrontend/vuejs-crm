@@ -41,16 +41,16 @@
 </template>
 
 <script>
-  export default {
-    name: "HistoryTable",
+export default {
+  name: 'HistoryTable',
 
-    props: {
-      records: {
-        required: true,
-        type: Array,
-      },
+  props: {
+    records: {
+      required: true,
+      type: Array,
     },
-  }
+  },
+};
 </script>
 
 <style scoped>

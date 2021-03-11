@@ -17,29 +17,29 @@
 </template>
 
 <script>
-  export default {
-    name: "HomeBill",
+export default {
+  name: 'HomeBill',
 
-    props: ['rates'],
+  props: ['rates'],
 
-    data() {
-      return {
-        currencies: ['RUB', 'USD', 'EUR'],
-      };
+  data() {
+    return {
+      currencies: ['RUB', 'USD', 'EUR'],
+    };
+  },
+
+  computed: {
+    base() {
+      return this.$store.getters.info.bill / (this.rates.RUB / this.rates.EUR);
     },
+  },
 
-    computed: {
-      base() {
-        return this.$store.getters.info.bill / (this.rates['RUB'] / this.rates['EUR']);
-      },
+  methods: {
+    getCurrency(currency) {
+      return Math.floor(this.base * this.rates[currency]);
     },
-
-    methods: {
-      getCurrency(currency) {
-        return Math.floor(this.base * this.rates[currency]);
-      }
-    }
-  }
+  },
+};
 </script>
 
 <style scoped>

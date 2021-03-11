@@ -43,70 +43,71 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
-  import currencyFilter  from '@/filters/currency.filter';
+import currencyFilter from '@/filters/currency.filter';
 
-  export default {
-    name: "Planning",
+export default {
+  name: 'Planning',
 
-    data() {
-      return {
-        loading: true,
-        categories: [],
-      };
+  data() {
+    return {
+      loading: true,
+      categories: [],
+    };
+  },
+
+  metaInfo() {
+    return {
+      title: this.$title('Menu_Planning'),
+    };
+  },
+
+  computed: {
+    ...mapGetters(['info']),
+    bill() {
+      return this.info.bill;
     },
+  },
 
-    metaInfo() {
-      return {
-        title: this.$title('Menu_Planning')
-      };
-    },
+  async mounted() {
+    const records = await this.$store.dispatch('fetchRecords');
+    const categories = await this.$store.dispatch('fetchCategories');
 
-    computed: {
-      ...mapGetters(['info']),
-      bill() {
-        return this.info.bill;
-      },
-    },
+    this.categories = categories
+      .map((cat) => {
+        const spend = records
+          .filter(record => record.categoryId === cat.id)
+          .filter(record => record.type === 'outcome')
+          .reduce((acc, record) => {
+            acc += +record.amount;
+            return acc;
+          }, 0);
 
-    async mounted() {
-      const records = await this.$store.dispatch('fetchRecords');
-      const categories = await this.$store.dispatch('fetchCategories');
+        const percent = 100 * spend / cat.limit;
+        const progressPercent = percent > 100 ? 100 : percent;
+        const progressColor = percent < 60
+          ? 'green'
+          : percent < 100
+            ? 'yellow'
+            : 'red';
+        const tooltipValue = cat.limit - spend;
+        const tooltip = `${tooltipValue < 0
+          ? 'Превышение на'
+          : 'Осталось'} ${currencyFilter(Math.abs(tooltipValue))}`;
 
-      this.categories = categories
-        .map(cat => {
-          const spend = records
-            .filter(record => record.categoryId === cat.id)
-            .filter(record => record.type === 'outcome')
-            .reduce((total, record) => {
-              return total += +record.amount;
-            }, 0);
+        return {
+          ...cat,
+          progressPercent,
+          progressColor,
+          spend,
+          tooltip,
+        };
+      });
 
-          const percent = 100 * spend / cat.limit;
-          const progressPercent = percent > 100 ? 100 : percent;
-          const progressColor = percent < 60
-            ? 'green'
-            : percent < 100
-              ? 'yellow'
-              : 'red';
-          const tooltipValue = cat.limit - spend;
-          const tooltip = `${tooltipValue < 0
-            ? 'Превышение на'
-            : 'Осталось'} ${currencyFilter(Math.abs(tooltipValue))}`;
-
-          return {
-            ...cat,
-            progressPercent,
-            progressColor,
-            spend,
-            tooltip,
-          };
-        });
-
-      this.loading = false;
-    }
-  }
+    this.loading = false;
+  },
+};
 </script>
 
 <style scoped>

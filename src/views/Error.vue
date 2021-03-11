@@ -1,16 +1,17 @@
 <template>
+  <div />
 </template>
 
 <script>
-  export default {
-    name: "Error",
+export default {
+  name: 'Error',
 
-    metaInfo() {
-      return {
-        title: this.$title('Error')
-      };
-    },
-  }
+  metaInfo() {
+    return {
+      title: this.$title('Error'),
+    };
+  },
+};
 </script>
 
 <style scoped>
