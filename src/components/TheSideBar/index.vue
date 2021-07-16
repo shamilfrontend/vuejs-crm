@@ -88,9 +88,15 @@ export default {
           exact: true,
         },
         {
+          label: localizeFilter('Menu_Categories'),
+          path: '/categories',
+          icon: 'q-icon-diagram-round',
+          exact: true,
+        },
+        {
           label: localizeFilter('Menu_History'),
           path: '/history',
-          icon: 'q-icon-diagram-round',
+          icon: 'q-icon-view-list',
           exact: true,
         },
         {
@@ -102,12 +108,6 @@ export default {
         {
           label: localizeFilter('Menu_NewRecord'),
           path: '/record',
-          icon: 'q-icon-diagram-round',
-          exact: true,
-        },
-        {
-          label: localizeFilter('Menu_Categories'),
-          path: '/categories',
           icon: 'q-icon-diagram-round',
           exact: true,
         },
@@ -163,7 +163,6 @@ export default {
     display: block;
     width: 100%;
     max-width: 100%;
-    margin-bottom: 40px;
     padding: 24px 34px;
     color: var(--color-tertiary-gray-lighter);
     font-size: 24px;

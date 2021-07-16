@@ -12,15 +12,16 @@
         <category-create
           @created="addNewCategory"
         />
-
-        <category-edit
-          v-if="!!categories.length"
-          :categories="categories"
-          :key="categories.length + updateCount"
-          @updated="updateCategories"
-        />
-        <p v-else>Категорий пока нет</p>
       </div>
+
+      <q-table
+        :rows="categories"
+        :groups-of-columns="groupsOfColumns"
+      >
+        <template #actionsRow="{ row }">
+          111
+        </template>
+      </q-table>
     </section>
   </div>
 </template>
@@ -45,8 +46,34 @@ export default {
 
   data() {
     return {
-      categories: [],
       loading: true,
+      categories: [],
+      groupsOfColumns: [
+        {
+          columns: [
+            {
+              key: 'id',
+              value: 'ID',
+            },
+            {
+              key: 'title',
+              value: 'Название',
+            },
+            {
+              key: 'limit',
+              value: 'Лимит',
+            },
+            {
+              key: 'actions',
+              width: '88px',
+              align: 'right',
+              slots: {
+                row: 'actionsRow',
+              },
+            },
+          ],
+        },
+      ],
       updateCount: 0,
     };
   },

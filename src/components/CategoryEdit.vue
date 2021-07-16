@@ -5,67 +5,46 @@
         <h4>Редактировать</h4>
       </div>
 
-      <form
-        @submit.prevent="submitHandler"
-      >
+      <form @submit.prevent="submitHandler">
         <div class="input-field">
-          <select
-            v-model="current"
-            ref="select"
-          >
-            <option
-              v-for="item of categories"
-              :key="item.id"
-              :value="item.id"
-            >{{ item.title }}
-            </option>
-          </select>
-          <label>Выберите категорию</label>
+          <q-select v-model="current">
+            <q-option
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id"
+              :label="category.title"
+            />
+          </q-select>
         </div>
 
         <div class="input-field">
-          <input
+          <q-input
             v-model="title"
             id="name"
             type="text"
+            placeholder="Название"
             autocomplete="off"
-            :class="{invalid: $v.title.$dirty && !$v.title.required}"
-          >
-          <label for="name">Название</label>
-          <span
-            v-if="$v.title.$dirty && !$v.title.required"
-            class="helper-text invalid"
-          >
-            Введите название категории
-          </span>
+          />
         </div>
 
         <div class="input-field">
-          <input
+          <q-input
             v-model.number="limit"
             id="limit"
+            placeholder="Лимит"
             type="number"
-            :class="{invalid: $v.limit.$dirty && !$v.limit.minValue}"
-          >
-          <label for="limit">Лимит</label>
-          <span
-            v-if="$v.limit.$dirty && !$v.limit.minValue"
-            class="helper-text invalid"
-          >Минимальное значение {{$v.limit.$params.minValue.min}}</span>
+          />
         </div>
 
-        <button class="btn waves-effect waves-light" type="submit">
+        <q-button native-type="submit">
           Обновить
-          <i class="material-icons right">send</i>
-        </button>
+        </q-button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import { required, minValue } from 'vuelidate/lib/validators';
-
 export default {
   name: 'CategoryEdit',
 
@@ -85,21 +64,8 @@ export default {
     };
   },
 
-  validations: {
-    title: {
-      required,
-    },
-    limit: {
-      minValue: minValue(100),
-    },
-  },
-
   methods: {
     async submitHandler() {
-      if (this.$v.$invalid) {
-        this.$v.$touch();
-        return;
-      }
       try {
         const categoryData = {
           id: this.current,
@@ -123,7 +89,7 @@ export default {
 
   watch: {
     current(catId) {
-      const { title, limit } = this.categories.find(item => item.id === catId);
+      const { title, limit } = this.categories.find(({ id }) => id === catId);
 
       this.title = title;
       this.limit = limit;
@@ -139,7 +105,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>
