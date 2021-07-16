@@ -4,25 +4,18 @@
       <h3>{{ 'ProfileTitle' | localize }}</h3>
     </div>
 
-    <form
+    <q-form
       class="form"
       @submit.prevent="submitHandler"
     >
-      <div class="input-field">
-        <input
+      <q-form-item :label="'Name' | localize">
+        <q-input
           v-model="name"
           id="description"
           type="text"
           :class="{invalid: $v.name.$dirty && !$v.name.required}"
-        >
-        <label for="description">{{ 'Name' | localize }}</label>
-        <small
-          v-if="$v.name.$dirty && !$v.name.required"
-          class="helper-text invalid"
-        >
-          {{ 'Message_EnterName' | localize  }}
-        </small>
-      </div>
+        />
+      </q-form-item>
 
       <div class="switch">
         <label>
@@ -43,7 +36,7 @@
         {{ 'Update' | localize }}
         <i class="material-icons right">send</i>
       </button>
-    </form>
+    </q-form>
   </div>
 </template>
 
@@ -99,9 +92,6 @@ export default {
   mounted() {
     this.name = this.info.name;
     this.isRuLocale = this.info.locale === 'ru-RU';
-    this.$nextTick(() => {
-      M.updateTextFields();
-    });
   },
 };
 </script>

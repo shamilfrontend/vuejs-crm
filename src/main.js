@@ -2,14 +2,18 @@ import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import Paginate from 'vuejs-paginate';
 import VueMeta from 'vue-meta';
+import Qui from '@qvant/qui';
 
 import firebase from 'firebase/app';
-import App from './App.vue';
+import 'firebase/auth';
+import 'firebase/database';
+
+import '@qvant/qui/dist/qui.css';
+
 import router from './router';
 import store from './store';
 
-import 'firebase/auth';
-import 'firebase/database';
+import App from './App';
 
 // filters
 import dateFilter from './filters/date.filter';
@@ -17,14 +21,12 @@ import currencyFilter from './filters/currency.filter';
 import localizeFilter from './filters/localize.filter';
 
 // directives
-import messagePlugin from './plugins/message.plugin';
 import titlePlugin from './plugins/title.plugin';
 
-// directives
-import tooltipDirective from './directives/tooltip.directive';
-
 // components
-import Loader from './components/Loader.vue';
+import QContainer from '@/components/QContainer';
+import QPageWrap from '@/components/QPageWrap';
+import AppLoader from '@/components/AppLoader';
 
 import './registerServiceWorker';
 import 'materialize-css/dist/js/materialize.min';
@@ -36,17 +38,14 @@ Vue.filter('localize', localizeFilter);
 
 // use plugins
 Vue.use(Vuelidate);
-Vue.use(messagePlugin);
 Vue.use(titlePlugin);
-Vue.use(VueMeta, {
-  refreshOnceOnNavigation: true,
-});
-
-// directives
-Vue.directive('tooltip', tooltipDirective);
+Vue.use(VueMeta, { refreshOnceOnNavigation: true });
+Vue.use(Qui);
 
 // components
-Vue.component('Loader', Loader);
+Vue.component('QContainer', QContainer);
+Vue.component('QPageWrap', QPageWrap);
+Vue.component('AppLoader', AppLoader);
 Vue.component('Paginate', Paginate);
 
 Vue.config.productionTip = false;

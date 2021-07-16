@@ -106,8 +106,14 @@ export default {
           title: this.title,
           limit: this.limit,
         };
+
         await this.$store.dispatch('updateCategory', categoryData);
-        this.$message('Категория успешно обновлена.');
+
+        this.$notify({
+          type: 'success',
+          message: 'Категория успешно обновлена.',
+        });
+
         this.$emit('updated', categoryData);
       } catch {
         // do nothing
@@ -130,18 +136,6 @@ export default {
     this.current = id;
     this.title = title;
     this.limit = limit;
-  },
-
-  mounted() {
-    M.updateTextFields();
-    this.select = M.FormSelect.init(this.$refs.select);
-  },
-
-  beforeDestroy() {
-    if (this.select && this.select.destroy) {
-      // eslint-disable-next-line no-undef
-      M.FormSelect.destroy();
-    }
   },
 };
 </script>

@@ -8,7 +8,7 @@
       <canvas ref="canvas"></canvas>
     </div>
 
-    <loader v-if="loading"/>
+    <app-loader v-if="loading"/>
 
     <p
       v-else-if="!records.length"
@@ -41,7 +41,7 @@
 import { Pie } from 'vue-chartjs';
 
 import paginationMixin from '@/mixins/pagination.mixin';
-import HistoryTable from '@/components/HistoryTable.vue';
+import HistoryTable from '@/components/HistoryTable';
 
 export default {
   name: 'History',

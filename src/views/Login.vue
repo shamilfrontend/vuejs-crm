@@ -134,7 +134,9 @@ export default {
 
   mounted() {
     if (messages[this.$route.query.message]) {
-      this.$message(messages[this.$route.query.message]);
+      this.$notify({
+        message: messages[this.$route.query.message],
+      });
     }
   },
 };

@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'Loader',
+  name: 'AppLoader',
 
   computed: {
     color() {

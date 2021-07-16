@@ -11,7 +11,7 @@
         </a>
       </div>
 
-      <loader v-if="loading"/>
+      <app-loader v-if="loading"/>
 
       <div
         v-else-if="!!record"

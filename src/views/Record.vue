@@ -4,7 +4,7 @@
       <h3>{{ 'Menu_NewRecord' | localize }}</h3>
     </div>
 
-    <loader v-if="loading"/>
+    <app-loader v-if="loading"/>
 
     <p
       v-else-if="!categories.length"
@@ -170,7 +170,10 @@ export default {
             bill,
           });
 
-          this.$message('Запись успешно создана!');
+          this.$notify({
+            type: 'success',
+            message: 'Запись успешно создана!',
+          });
           this.$v.$reset();
 
           this.amount = 1;
@@ -179,7 +182,10 @@ export default {
           // do nothing
         }
       } else {
-        this.$message(`Недостаточно средств на счете (${this.amount - this.bill})`);
+        this.$notify({
+          type: 'success',
+          message: `Недостаточно средств на счете (${this.amount - this.bill})`,
+        });
       }
     },
   },
@@ -191,19 +197,7 @@ export default {
     if (this.categories.length) {
       this.category = this.categories[0].id;
     }
-
-    this.$nextTick(() => {
-      M.updateTextFields();
-      this.select = M.FormSelect.init(this.$refs.select);
-    });
-  },
-
-  beforeDestroy() {
-    if (this.select && this.select.destroy) {
-      // eslint-disable-next-line no-undef
-      M.FormSelect.destroy();
-    }
-  },
+  }
 };
 </script>
 

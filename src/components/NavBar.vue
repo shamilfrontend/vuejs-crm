@@ -84,10 +84,6 @@ export default {
     this.interval = setInterval(() => {
       this.date = new Date();
     }, 1000);
-
-    this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
-      constrainWidth: false,
-    });
   },
 
   beforeDestroy() {

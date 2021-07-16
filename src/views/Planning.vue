@@ -5,7 +5,7 @@
       <h4>{{ bill | currency('RUB') }}</h4>
     </div>
 
-    <loader v-if="loading"/>
+    <app-loader v-if="loading"/>
 
     <p
       v-else-if="!categories.length"
@@ -27,10 +27,7 @@
           <strong>{{ item.title }}:</strong>
           {{ item.spend | currency}} из {{ item.limit | currency}}
         </p>
-        <div
-          class="progress"
-          v-tooltip="item.tooltip"
-        >
+        <div class="progress">
           <div
             class="determinate"
             :class="[item.progressColor]"

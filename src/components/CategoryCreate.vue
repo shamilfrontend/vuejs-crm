@@ -92,16 +92,14 @@ export default {
         this.limit = 100;
         this.$v.$reset();
 
-        // message
-        this.$message('Категория была создана');
+        this.$notify({
+          type: 'success',
+          message: 'Категория была создана',
+        });
       } catch {
         // do nothing
       }
     },
-  },
-
-  mounted() {
-    M.updateTextFields();
   },
 };
 </script>

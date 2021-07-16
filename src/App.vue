@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import EmptyLayout from './layouts/EmptyLayout.vue';
-import MainLayout from './layouts/MainLayout.vue';
+import EmptyLayout from './layouts/EmptyLayout';
+import MainLayout from './layouts/MainLayout';
 
 export default {
   name: 'App',

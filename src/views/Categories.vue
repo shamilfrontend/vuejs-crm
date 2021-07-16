@@ -4,7 +4,7 @@
       <h3>Категории</h3>
     </div>
     <section>
-      <loader v-if="loading" />
+      <app-loader v-if="loading" />
       <div
         v-else
         class="row"
@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import CategoryCreate from '@/components/CategoryCreate.vue';
-import CategoryEdit from '@/components/CategoryEdit.vue';
+import CategoryCreate from '@/components/CategoryCreate';
+import CategoryEdit from '@/components/CategoryEdit';
 
 export default {
   name: 'Categories',

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <q-input v-model="value" />
+    <pre>{{ value }}</pre>
+
     <div class="page-title">
       <h3>{{'Bill' | localize}}</h3>
 
@@ -11,13 +14,11 @@
       </button>
     </div>
 
-    <loader v-if="loading"/>
-
+    <app-loader v-if="loading"/>
     <div
       v-else
       class="row"
     >
-
       <home-bill
         :rates="currency.rates"
       />
@@ -31,8 +32,8 @@
 </template>
 
 <script>
-import HomeBill from '@/components/HomeBill.vue';
-import HomeCurrency from '@/components/HomeCurrency.vue';
+import HomeBill from '@/components/HomeBill';
+import HomeCurrency from '@/components/HomeCurrency';
 
 export default {
   name: 'home',
@@ -41,6 +42,7 @@ export default {
     return {
       loading: true,
       currency: null,
+      value: '',
     };
   },
 
