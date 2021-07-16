@@ -6,7 +6,9 @@ Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
+
   base: process.env.BASE_URL,
+
   routes: [
     {
       path: '/login',
@@ -91,7 +93,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
+  const { currentUser } = firebase.auth();
   const requiredAuth = to.matched.some(item => item.meta.auth);
 
   if (requiredAuth && !currentUser) {

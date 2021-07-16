@@ -5,7 +5,7 @@ export default {
     info: {},
   },
   getters: {
-    info: s => s.info
+    info: s => s.info,
   },
   mutations: {
     setInfo(state, payload) {
@@ -27,10 +27,10 @@ export default {
         throw e;
       }
     },
-    async updateInfo({dispatch, commit, getters}, toUpdate) {
+    async updateInfo({ dispatch, commit, getters }, toUpdate) {
       try {
         const uid = await dispatch('getUid');
-        const updateDate = {...getters.info, ...toUpdate};
+        const updateDate = { ...getters.info, ...toUpdate };
         console.log('updateDate', updateDate);
         await firebase.database().ref(`/users/${uid}/info`).update(updateDate);
         commit('setInfo', updateDate);
@@ -39,5 +39,5 @@ export default {
         throw e;
       }
     },
-  }
+  },
 };

@@ -4,7 +4,7 @@
       <h3>Категории</h3>
     </div>
     <section>
-      <loader v-if="loading" />
+      <app-loader v-if="loading" />
       <div
         v-else
         class="row"
@@ -12,62 +12,89 @@
         <category-create
           @created="addNewCategory"
         />
-
-        <category-edit
-          v-if="!!categories.length"
-          :categories="categories"
-          :key="categories.length + updateCount"
-          @updated="updateCategories"
-        />
-        <p v-else>Категорий пока нет</p>
       </div>
+
+      <q-table
+        :rows="categories"
+        :groups-of-columns="groupsOfColumns"
+      >
+        <template #actionsRow="{ row }">
+          111
+        </template>
+      </q-table>
     </section>
   </div>
 </template>
 
 <script>
-  import CategoryCreate from '@/components/CategoryCreate'
-  import CategoryEdit from '@/components/CategoryEdit'
+import CategoryCreate from '@/components/CategoryCreate';
+import CategoryEdit from '@/components/CategoryEdit';
 
-  export default {
-    name: "Categories",
+export default {
+  name: 'Categories',
 
-    components: {
-      CategoryCreate,
-      CategoryEdit
+  components: {
+    CategoryCreate,
+    CategoryEdit,
+  },
+
+  metaInfo() {
+    return {
+      title: this.$title('Categories'),
+    };
+  },
+
+  data() {
+    return {
+      loading: true,
+      categories: [],
+      groupsOfColumns: [
+        {
+          columns: [
+            {
+              key: 'id',
+              value: 'ID',
+            },
+            {
+              key: 'title',
+              value: 'Название',
+            },
+            {
+              key: 'limit',
+              value: 'Лимит',
+            },
+            {
+              key: 'actions',
+              width: '88px',
+              align: 'right',
+              slots: {
+                row: 'actionsRow',
+              },
+            },
+          ],
+        },
+      ],
+      updateCount: 0,
+    };
+  },
+
+  methods: {
+    addNewCategory(category) {
+      this.categories.push(category);
     },
-
-    metaInfo() {
-      return {
-        title: this.$title('Categories')
-      };
+    updateCategories(category) {
+      const index = this.categories.findIndex(item => item.id === category.id);
+      this.categories[index].title = category.title;
+      this.categories[index].limit = category.limit;
+      this.updateCount++;
     },
+  },
 
-    data() {
-      return {
-        categories: [],
-        loading: true,
-        updateCount: 0,
-      };
-    },
-
-    methods: {
-      addNewCategory(category) {
-        this.categories.push(category);
-      },
-      updateCategories(category) {
-        const index = this.categories.findIndex(item => item.id === category.id);
-        this.categories[index].title = category.title;
-        this.categories[index].limit = category.limit;
-        this.updateCount++;
-      },
-    },
-
-    async mounted() {
-      this.categories = await this.$store.dispatch('fetchCategories');
-      this.loading = false;
-    },
-  }
+  async mounted() {
+    this.categories = await this.$store.dispatch('fetchCategories');
+    this.loading = false;
+  },
+};
 </script>
 
 <style scoped>

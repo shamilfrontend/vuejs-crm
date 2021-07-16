@@ -4,7 +4,7 @@
       <h3>{{ 'Menu_NewRecord' | localize }}</h3>
     </div>
 
-    <loader v-if="loading"/>
+    <app-loader v-if="loading"/>
 
     <p
       v-else-if="!categories.length"
@@ -99,110 +99,106 @@
 </template>
 
 <script>
-  import {required, minValue} from 'vuelidate/lib/validators';
-  import {mapGetters} from 'vuex';
+import { required, minValue } from 'vuelidate/lib/validators';
+import { mapGetters } from 'vuex';
 
-  export default {
-    name: "Record",
+export default {
+  name: 'Record',
 
-    metaInfo() {
-      return {
-        title: this.$title('Menu_NewRecord')
-      };
+  metaInfo() {
+    return {
+      title: this.$title('Menu_NewRecord'),
+    };
+  },
+
+  data() {
+    return {
+      loading: true,
+      categories: [],
+      select: null,
+
+      category: '',
+      type: 'outcome',
+      amount: 1,
+      description: '',
+    };
+  },
+
+  validations: {
+    amount: {
+      required,
+      minValue: minValue(1),
     },
-
-    data() {
-      return {
-        loading: true,
-        categories: [],
-        select: null,
-
-        category: '',
-        type: 'outcome',
-        amount: 1,
-        description: '',
-      };
+    description: {
+      required,
     },
+  },
 
-    validations: {
-      amount: {
-        required,
-        minValue: minValue(1),
-      },
-      description: {
-        required,
-      },
+  computed: {
+    ...mapGetters(['info']),
+    bill() {
+      return this.info.bill;
     },
-
-    computed: {
-      ...mapGetters(['info']),
-      bill() {
-        return this.info.bill;
-      },
-      canCreateRecord() {
-        if (this.type === 'income') return true;
-        return this.bill >= this.amount;
-      },
+    canCreateRecord() {
+      if (this.type === 'income') return true;
+      return this.bill >= this.amount;
     },
+  },
 
-    methods: {
-      async submitHandler() {
-        if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
-        }
-
-        if (this.canCreateRecord) {
-          try {
-            await this.$store.dispatch('createRecord', {
-              categoryId: this.category,
-              type: this.type,
-              amount: this.amount,
-              description: this.description,
-              date: new Date().toJSON(),
-            });
-
-            const bill = this.type === 'income'
-              ? this.bill + this.amount
-              : this.bill - this.amount;
-
-            await this.$store.dispatch('updateInfo', {
-              bill,
-            });
-
-            this.$message('Запись успешно создана!');
-            this.$v.$reset();
-
-            this.amount = 1;
-            this.description = '';
-          } catch (e) {
-          }
-        } else {
-          this.$message(`Недостаточно средств на счете (${this.amount - this.bill})`);
-        }
-      },
-    },
-
-    async mounted() {
-      this.categories = await this.$store.dispatch('fetchCategories');
-      this.loading = false;
-
-      if (this.categories.length) {
-        this.category = this.categories[0].id;
+  methods: {
+    async submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
       }
 
-      this.$nextTick(() => {
-        M.updateTextFields();
-        this.select = M.FormSelect.init(this.$refs.select);
-      });
-    },
+      if (this.canCreateRecord) {
+        try {
+          await this.$store.dispatch('createRecord', {
+            categoryId: this.category,
+            type: this.type,
+            amount: this.amount,
+            description: this.description,
+            date: new Date().toJSON(),
+          });
 
-    beforeDestroy() {
-      if (this.select && this.select.destroy) {
-        M.FormSelect.destroy();
+          const bill = this.type === 'income'
+            ? this.bill + this.amount
+            : this.bill - this.amount;
+
+          await this.$store.dispatch('updateInfo', {
+            bill,
+          });
+
+          this.$notify({
+            type: 'success',
+            message: 'Запись успешно создана!',
+          });
+          this.$v.$reset();
+
+          this.amount = 1;
+          this.description = '';
+        } catch {
+          // do nothing
+        }
+      } else {
+        this.$notify({
+          type: 'success',
+          message: `Недостаточно средств на счете (${this.amount - this.bill})`,
+        });
       }
+    },
+  },
+
+  async mounted() {
+    this.categories = await this.$store.dispatch('fetchCategories');
+    this.loading = false;
+
+    if (this.categories.length) {
+      this.category = this.categories[0].id;
     }
   }
+};
 </script>
 
 <style scoped>

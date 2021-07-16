@@ -1,93 +1,76 @@
 <template>
-  <div class="wrap">
-    <loader v-if="loading" />
-    <div
-      v-else
-      class="app-main-layout"
-    >
-      <nav-bar
-        @click="isOpen = !isOpen"
-      />
+  <div class="base-layout">
+    <div class="base-layout__aside">
+      <the-side-bar/>
+    </div>
 
-      <side-nav
-        v-model="isOpen"
-        :key="locale"
-      />
-
-      <main :class="appContentClasses">
-        <div class="app-page">
-
-          <router-view />
-
-        </div>
-      </main>
-
-      <div
-        class="fixed-action-btn"
-      >
-        <router-link
-          class="btn-floating btn-large blue"
-          to="/record"
-          v-tooltip="'CreateNewRecord'"
-        >
-          <i class="large material-icons">add</i>
-        </router-link>
+    <div class="base-layout__content">
+      <div class="base-layout__inner">
+        <router-view/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import NavBar from '@/components/NavBar';
-  import SideNav from '@/components/SideNav';
+import TheSideBar from '@/components/TheSideBar';
+import messages from '@/config/messages';
 
-  import messages from '@/config/messages';
+export default {
+  name: 'MainLayout',
 
-  export default {
-    name: "MainLayout",
+  components: {
+    TheSideBar,
+  },
 
-    components: {
-      NavBar,
-      SideNav,
+  computed: {
+    error() {
+      return this.$store.getters.error;
     },
 
-    data() {
-      return {
-        isOpen: true,
-        loading: true,
-      };
+    locale() {
+      return this.$store.getters.info.locale;
     },
+  },
 
-    computed: {
-      appContentClasses() {
-        return {
-          'app-content': true,
-          'full': !this.isOpen,
-        };
-      },
-      error() {
-        return this.$store.getters.error;
-      },
-      locale() {
-        return this.$store.getters.info.locale;
-      },
+  watch: {
+    error(fbError) {
+      this.$error(messages[fbError.code] || 'Что то пошло не так.');
     },
+  },
 
-    watch: {
-      error(fbError) {
-        this.$error(messages[fbError.code] || 'Что то пошло не так.');
-      },
-    },
-
-    async mounted() {
-      if (!Object.keys(this.$store.getters.info).length) {
-        await this.$store.dispatch('fetchInfo');
-      }
-      this.loading = false;
+  async mounted() {
+    if (!Object.keys(this.$store.getters.info).length) {
+      await this.$store.dispatch('fetchInfo');
     }
-  }
+  },
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.base-layout {
+  display: grid;
+  min-width: 1280px;
+  min-height: 100vh;
+  grid-template-columns: auto 1fr;
 
+  &__aside {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 100%;
+    max-height: 100vh;
+  }
+
+  &__content,
+  &__inner {
+    height: 100%;
+  }
+
+  &__content {
+    width: 100%;
+    min-width: 100%;
+    padding: 32px 32px 48px;
+  }
+}
 </style>

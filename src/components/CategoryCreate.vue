@@ -1,108 +1,98 @@
 <template>
-  <div class="col s12 m6">
-    <div>
-      <div class="page-subtitle">
-        <h4>Создать</h4>
-      </div>
+  <div>
+    <div class="page-subtitle">
+      <h4>Создать</h4>
+    </div>
 
-      <form
-        @submit.prevent="submitHandler"
-      >
-        <div class="input-field">
-          <input
-            v-model="title"
-            id="name"
-            type="text"
-            autocomplete="off"
-            :class="{invalid: $v.title.$dirty && !$v.title.required}"
-          >
-          <label for="name">Название</label>
-          <span
-            v-if="$v.title.$dirty && !$v.title.required"
-            class="helper-text invalid"
-          >
+    <form @submit.prevent="submitHandler">
+      <div class="input-field">
+        <q-input
+          v-model="title"
+          id="name"
+          placeholder="Название"
+          :class="{invalid: $v.title.$dirty && !$v.title.required}"
+        />
+        <span
+          v-if="$v.title.$dirty && !$v.title.required"
+          class="helper-text invalid"
+        >
             Введите название категории
           </span>
-        </div>
+      </div>
 
-        <div class="input-field">
-          <input
-            v-model.number="limit"
-            id="limit"
-            type="number"
-            :class="{invalid: $v.limit.$dirty && !$v.limit.minValue}"
-          >
-          <label for="limit">Лимит</label>
-          <span
-            v-if="$v.limit.$dirty && !$v.limit.minValue"
-            class="helper-text invalid"
-          >Минимальное значение {{$v.limit.$params.minValue.min}}</span>
-        </div>
+      <div class="input-field">
+        <q-input-number
+          v-model.number="limit"
+          id="limit"
+          :class="{invalid: $v.limit.$dirty && !$v.limit.minValue}"
+        />
+        <span
+          v-if="$v.limit.$dirty && !$v.limit.minValue"
+          class="helper-text invalid"
+        >Минимальное значение {{$v.limit.$params.minValue.min}}</span>
+      </div>
 
-        <button class="btn waves-effect waves-light" type="submit">
-          Создать
-          <i class="material-icons right">send</i>
-        </button>
-      </form>
-    </div>
+      <q-button native-type="submit">
+        Создать
+      </q-button>
+    </form>
   </div>
 </template>
 
 <script>
-  import { required, minValue } from 'vuelidate/lib/validators';
+import { required, minValue } from 'vuelidate/lib/validators';
 
-  export default {
-    name: "CategoryCreate",
+export default {
+  name: 'CategoryCreate',
 
-    data() {
-      return {
-        title: '',
-        limit: 100,
-      };
+  data() {
+    return {
+      title: '',
+      limit: 100,
+    };
+  },
+
+  validations: {
+    title: {
+      required,
     },
+    limit: {
+      minValue: minValue(100),
+    },
+  },
 
-    validations: {
-      title: {
-        required,
-      },
-      limit: {
-        minValue: minValue(100),
+  methods: {
+    async submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
+
+      try {
+        // create
+        const category = await this.$store.dispatch('createCategory', {
+          title: this.title,
+          limit: this.limit,
+        });
+
+        // emit
+        this.$emit('created', category);
+
+        // clear form data
+        this.title = '';
+        this.limit = 100;
+        this.$v.$reset();
+
+        this.$notify({
+          type: 'success',
+          message: 'Категория была создана',
+        });
+      } catch {
+        // do nothing
       }
     },
-
-    methods: {
-      async submitHandler() {
-        if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
-        }
-
-        try {
-          // create
-          const category = await this.$store.dispatch('createCategory', {
-            title: this.title,
-            limit: this.limit,
-          });
-
-          // emit
-          this.$emit('created', category);
-
-          // clear form data
-          this.title = '';
-          this.limit = 100;
-          this.$v.$reset();
-
-          // message
-          this.$message('Категория была создана');
-        } catch (e) {
-        }
-      },
-    },
-
-    mounted() {
-      M.updateTextFields();
-    },
-  }
+  },
+};
 </script>
 
 <style scoped>

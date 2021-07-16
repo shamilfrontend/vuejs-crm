@@ -20,17 +20,17 @@
 </template>
 
 <script>
-  export default {
-    name: "Loader",
+export default {
+  name: 'AppLoader',
 
-    computed: {
-      color() {
-        const colors = ['spinner-red-only', 'spinner-blue-only', 'spinner-green-only '];
-        const random = Math.floor(Math.random() * colors.length);
-        return colors[random];
-      },
-    }
-  }
+  computed: {
+    color() {
+      const colors = ['spinner-red-only', 'spinner-blue-only', 'spinner-green-only '];
+      const random = Math.floor(Math.random() * colors.length);
+      return colors[random];
+    },
+  },
+};
 </script>
 
 <style scoped>

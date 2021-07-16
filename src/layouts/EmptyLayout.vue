@@ -5,23 +5,23 @@
 </template>
 
 <script>
-  import messages from '@/config/messages';
+import messages from '@/config/messages';
 
-  export default {
-    name: "EmptyLayout",
+export default {
+  name: 'EmptyLayout',
 
-    computed: {
-      error() {
-        return this.$store.getters.error;
-      },
+  computed: {
+    error() {
+      return this.$store.getters.error;
     },
+  },
 
-    watch: {
-      error(fbError) {
-        this.$error(messages[fbError.code] || 'Что то пошло не так.');
-      },
+  watch: {
+    error(fbError) {
+      this.$error(messages[fbError.code] || 'Что то пошло не так.');
     },
-  }
+  },
+};
 </script>
 
 <style scoped>

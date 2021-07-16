@@ -29,7 +29,7 @@
         <td>
           <button
             class="btn-small btn"
-            v-tooltip="'OpenRecord' "
+            type="button"
             @click="$router.push(`/detail/${record.id}`)"
           >
             <i class="material-icons">open_in_new</i>
@@ -41,16 +41,16 @@
 </template>
 
 <script>
-  export default {
-    name: "HistoryTable",
+export default {
+  name: 'HistoryTable',
 
-    props: {
-      records: {
-        required: true,
-        type: Array,
-      },
+  props: {
+    records: {
+      required: true,
+      type: Array,
     },
-  }
+  },
+};
 </script>
 
 <style scoped>
