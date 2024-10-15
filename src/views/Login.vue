@@ -56,87 +56,83 @@
 </template>
 
 <script>
-  import {email, required, minLength} from 'vuelidate/lib/validators';
-  import messages from '@/config/messages';
+import { email, required, minLength } from 'vuelidate/lib/validators';
+import messages from '@/config/messages';
 
-  export default {
-    name: "Login",
+export default {
+  name: 'Login',
 
-    data() {
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+
+  metaInfo() {
+    return {
+      title: this.$title('Login'),
+    };
+  },
+
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(6),
+    },
+  },
+
+  computed: {
+    isEmailRequired() {
+      return this.$v.$dirty && !this.$v.email.required;
+    },
+    isValidEmail() {
+      return this.$v.$dirty && !this.$v.email.email;
+    },
+    emailClasses() {
       return {
-        email: '',
-        password: '',
+        invalid: (this.isValidEmail) || (this.isEmailRequired),
       };
     },
 
-    metaInfo() {
+    passwordIsRequired() {
+      return this.$v.$dirty && !this.$v.password.required;
+    },
+    passwordIsCorrectLength() {
+      return this.$v.$dirty && !this.$v.password.minLength;
+    },
+    passwordClasses() {
       return {
-        title: this.$title('Login')
+        invalid: (this.passwordIsRequired) || (this.passwordIsCorrectLength),
       };
     },
+  },
 
-    validations: {
-      email: {
-        required,
-        email
-      },
-      password: {
-        required,
-        minLength: minLength(6)
+  methods: {
+    async submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
       }
+
+      try {
+        await this.$store.dispatch('login', {
+          email: this.email,
+          password: this.password,
+        });
+        this.$router.push('/');
+      } catch (e) {}
     },
+  },
 
-    computed: {
-      isEmailRequired() {
-        return this.$v.$dirty && !this.$v.email.required;
-      },
-      isValidEmail() {
-        return this.$v.$dirty && !this.$v.email.email;
-      },
-      emailClasses() {
-        return {
-          'invalid': (this.isValidEmail) || (this.isEmailRequired),
-        };
-      },
-
-      passwordIsRequired() {
-        return this.$v.$dirty && !this.$v.password.required;
-      },
-      passwordIsCorrectLength() {
-        return this.$v.$dirty && !this.$v.password.minLength;
-      },
-      passwordClasses() {
-        return {
-          'invalid': (this.passwordIsRequired) || (this.passwordIsCorrectLength),
-        };
-      },
-    },
-
-    methods: {
-      async submitHandler() {
-        if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
-        }
-
-        try {
-          await this.$store.dispatch('login', {
-            email: this.email,
-            password: this.password,
-          });
-          this.$router.push('/');
-        } catch (e) {}
-      },
-    },
-
-    mounted() {
-      if (messages[this.$route.query.message]) {
-        this.$message(messages[this.$route.query.message]);
-      }
+  mounted() {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages[this.$route.query.message]);
     }
-  }
+  },
+};
 </script>
-
-<style scoped>
-
-</style>

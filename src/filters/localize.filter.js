@@ -1,7 +1,7 @@
-import store from '@/store'
+import store from '@/store';
 
-import ru from '@/locales/ru'
-import en from '@/locales/en'
+import ru from '@/locales/ru';
+import en from '@/locales/en';
 
 const locales = {
   'ru-RU': ru,

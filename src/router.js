@@ -14,7 +14,7 @@ const router = new Router({
       meta: {
         layout: 'empty',
       },
-      component: () => import('@/views/Login'),
+      component: () => import('@/views/Login.vue'),
     },
     {
       path: '/register',
@@ -22,7 +22,7 @@ const router = new Router({
       meta: {
         layout: 'empty',
       },
-      component: () => import('@/views/Register'),
+      component: () => import('@/views/Register.vue'),
     },
     {
       path: '/',
@@ -31,7 +31,7 @@ const router = new Router({
         layout: 'main',
         auth: true,
       },
-      component: () => import('@/views/Home'),
+      component: () => import('@/views/Home.vue'),
     },
     {
       path: '/categories',
@@ -40,7 +40,7 @@ const router = new Router({
         layout: 'main',
         auth: true,
       },
-      component: () => import('@/views/Categories'),
+      component: () => import('@/views/Categories.vue'),
     },
     {
       path: '/detail/:id',
@@ -49,7 +49,7 @@ const router = new Router({
         layout: 'main',
         auth: true,
       },
-      component: () => import('@/views/DetailRecord'),
+      component: () => import('@/views/DetailRecord.vue'),
     },
     {
       path: '/history',
@@ -58,7 +58,7 @@ const router = new Router({
         layout: 'main',
         auth: true,
       },
-      component: () => import('@/views/History'),
+      component: () => import('@/views/History.vue'),
     },
     {
       path: '/planning',
@@ -67,7 +67,7 @@ const router = new Router({
         layout: 'main',
         auth: true,
       },
-      component: () => import('@/views/Planning'),
+      component: () => import('@/views/Planning.vue'),
     },
     {
       path: '/profile',
@@ -76,7 +76,7 @@ const router = new Router({
         layout: 'main',
         auth: true,
       },
-      component: () => import('@/views/Profile'),
+      component: () => import('@/views/Profile.vue'),
     },
     {
       path: '/record',
@@ -85,13 +85,13 @@ const router = new Router({
         layout: 'main',
         auth: true,
       },
-      component: () => import('@/views/Record'),
+      component: () => import('@/views/Record.vue'),
     },
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
+  const { currentUser } = firebase.auth();
   const requiredAuth = to.matched.some(item => item.meta.auth);
 
   if (requiredAuth && !currentUser) {

@@ -38,56 +38,52 @@
 </template>
 
 <script>
-  import NavBar from '@/components/NavBar';
-  import SideNav from '@/components/SideNav';
+import NavBar from '@/components/NavBar';
+import SideNav from '@/components/SideNav';
 
-  import messages from '@/config/messages';
+import messages from '@/config/messages';
 
-  export default {
-    name: "MainLayout",
+export default {
+  name: 'MainLayout',
 
-    components: {
-      NavBar,
-      SideNav,
-    },
+  components: {
+    NavBar,
+    SideNav,
+  },
 
-    data() {
+  data() {
+    return {
+      isOpen: true,
+      loading: true,
+    };
+  },
+
+  computed: {
+    appContentClasses() {
       return {
-        isOpen: true,
-        loading: true,
+        'app-content': true,
+        full: !this.isOpen,
       };
     },
-
-    computed: {
-      appContentClasses() {
-        return {
-          'app-content': true,
-          'full': !this.isOpen,
-        };
-      },
-      error() {
-        return this.$store.getters.error;
-      },
-      locale() {
-        return this.$store.getters.info.locale;
-      },
+    error() {
+      return this.$store.getters.error;
     },
-
-    watch: {
-      error(fbError) {
-        this.$error(messages[fbError.code] || 'Что то пошло не так.');
-      },
+    locale() {
+      return this.$store.getters.info.locale;
     },
+  },
 
-    async mounted() {
-      if (!Object.keys(this.$store.getters.info).length) {
-        await this.$store.dispatch('fetchInfo');
-      }
-      this.loading = false;
+  watch: {
+    error(fbError) {
+      this.$error(messages[fbError.code] || 'Что то пошло не так.');
+    },
+  },
+
+  async mounted() {
+    if (!Object.keys(this.$store.getters.info).length) {
+      await this.$store.dispatch('fetchInfo');
     }
-  }
+    this.loading = false;
+  },
+};
 </script>
-
-<style scoped>
-
-</style>

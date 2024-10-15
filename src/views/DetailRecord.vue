@@ -38,45 +38,41 @@
 </template>
 
 <script>
-  export default {
-    name: "DetailRecord",
+export default {
+  name: 'DetailRecord',
 
-    data() {
-      return {
-        loading: true,
-        record: true,
+  data() {
+    return {
+      loading: true,
+      record: true,
+    };
+  },
+
+  metaInfo() {
+    return {
+      title: this.$title('Menu_History'),
+    };
+  },
+
+  async mounted() {
+    const { id } = this.$route.params;
+
+    if (id) {
+      const record = await this.$store.dispatch('fetchRecordsById', id);
+      const category = await this.$store.dispatch('fetchCategoriesById', record.categoryId);
+
+      // this.record = record;
+      this.record = {
+        ...record,
+        categoryName: category.title,
+        typeClass: record.type === 'income' ? 'green' : 'red',
+        typeText: record.type === 'income' ? 'Доход' : 'Расход',
       };
-    },
 
-    metaInfo() {
-      return {
-        title: this.$title('Menu_History')
-      };
-    },
+      this.loading = false;
 
-    async mounted() {
-      const id = this.$route.params.id;
-
-      if (id) {
-        const record = await this.$store.dispatch('fetchRecordsById', id);
-        const category = await this.$store.dispatch('fetchCategoriesById', record.categoryId);
-
-        // this.record = record;
-        this.record = {
-          ...record,
-          categoryName: category.title,
-          typeClass: record.type === 'income' ? 'green' : 'red',
-          typeText: record.type === 'income' ? 'Доход' : 'Расход',
-        };
-
-        this.loading = false;
-
-        console.log('record', record);
-      }
+      console.log('record', record);
     }
-  }
+  },
+};
 </script>
-
-<style scoped>
-
-</style>

@@ -31,19 +31,15 @@
 </template>
 
 <script>
-  export default {
-    name: "HomeCurrency",
+export default {
+  name: 'HomeCurrency',
 
-    props: ['rates', 'date'],
+  props: ['rates', 'date'],
 
-    data() {
-      return {
-        currencies: ['RUB', 'USD', 'EUR'],
-      };
-    },
-  }
+  data() {
+    return {
+      currencies: ['RUB', 'USD', 'EUR'],
+    };
+  },
+};
 </script>
-
-<style scoped>
-
-</style>

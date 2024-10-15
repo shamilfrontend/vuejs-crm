@@ -52,52 +52,50 @@
 </template>
 
 <script>
-  export default {
-    name: "NavBar",
+export default {
+  name: 'NavBar',
 
-    data() {
-      return {
-        date: new Date(),
-        interval: null,
-        dropdown: null,
-      };
+  data() {
+    return {
+      date: new Date(),
+      interval: null,
+      dropdown: null,
+    };
+  },
+
+  computed: {
+    userName() {
+      return this.$store.getters.info.name;
     },
+  },
 
-    computed: {
-      userName() {
-        return this.$store.getters.info.name;
-      },
-    },
-
-    methods: {
-      async logOut() {
-        try {
-          await this.$store.dispatch('logOut');
-          this.$router.push('/login?message=logout');
-        } catch (e) {
-        }
-      },
-    },
-
-    mounted() {
-      this.interval = setInterval(() => {
-        this.date = new Date();
-      }, 1000);
-
-      this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
-        constrainWidth: false
-      });
-    },
-
-    beforeDestroy() {
-      clearInterval(this.interval);
-      if (this.dropdown && this.dropdown.destroy) {
-        this.dropdown.destroy();
+  methods: {
+    async logOut() {
+      try {
+        await this.$store.dispatch('logOut');
+        this.$router.push('/login?message=logout');
+      } catch (e) {
+        // code
       }
     },
-  }
+  },
+
+  mounted() {
+    this.interval = setInterval(() => {
+      this.date = new Date();
+    }, 1000);
+
+    this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
+      constrainWidth: false,
+    });
+  },
+
+  beforeDestroy() {
+    clearInterval(this.interval);
+
+    if (this.dropdown && this.dropdown.destroy) {
+      this.dropdown.destroy();
+    }
+  },
+};
 </script>
-
-<style scoped>
-
-</style>

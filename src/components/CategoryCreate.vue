@@ -5,9 +5,7 @@
         <h4>Создать</h4>
       </div>
 
-      <form
-        @submit.prevent="submitHandler"
-      >
+      <form @submit.prevent="submitHandler">
         <div class="input-field">
           <input
             v-model="title"
@@ -49,62 +47,59 @@
 </template>
 
 <script>
-  import { required, minValue } from 'vuelidate/lib/validators';
+import { required, minValue } from 'vuelidate/lib/validators';
 
-  export default {
-    name: "CategoryCreate",
+export default {
+  name: 'CategoryCreate',
 
-    data() {
-      return {
-        title: '',
-        limit: 100,
-      };
+  data() {
+    return {
+      title: '',
+      limit: 100,
+    };
+  },
+
+  validations: {
+    title: {
+      required,
     },
+    limit: {
+      minValue: minValue(100),
+    },
+  },
 
-    validations: {
-      title: {
-        required,
-      },
-      limit: {
-        minValue: minValue(100),
+  methods: {
+    async submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
+
+      try {
+        // create
+        const category = await this.$store.dispatch('createCategory', {
+          title: this.title,
+          limit: this.limit,
+        });
+
+        // emit
+        this.$emit('created', category);
+
+        // clear form data
+        this.title = '';
+        this.limit = 100;
+        this.$v.$reset();
+
+        // message
+        this.$message('Категория была создана');
+      } catch (e) {
+        // error code
       }
     },
+  },
 
-    methods: {
-      async submitHandler() {
-        if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
-        }
-
-        try {
-          // create
-          const category = await this.$store.dispatch('createCategory', {
-            title: this.title,
-            limit: this.limit,
-          });
-
-          // emit
-          this.$emit('created', category);
-
-          // clear form data
-          this.title = '';
-          this.limit = 100;
-          this.$v.$reset();
-
-          // message
-          this.$message('Категория была создана');
-        } catch (e) {
-        }
-      },
-    },
-
-    mounted() {
-      M.updateTextFields();
-    },
-  }
+  mounted() {
+    M.updateTextFields();
+  },
+};
 </script>
-
-<style scoped>
-
-</style>
